@@ -1,173 +1,266 @@
-# Pedidos Veloz — Plataforma de Microsserviços com Docker, Kubernetes e Observabilidade
+# Pedidos Veloz – Microsserviços com Docker, PostgreSQL, RabbitMQ e Kubernetes
 
 ## 📌 Sobre o Projeto
 
-O projeto **Pedidos Veloz** foi desenvolvido como uma solução cloud-native baseada em microsserviços para uma empresa fictícia de e-commerce chamada **Loja Veloz**.
+O projeto **Pedidos Veloz** foi desenvolvido com o objetivo de demonstrar a implementação de uma arquitetura baseada em microsserviços utilizando tecnologias modernas de conteinerização, persistência de dados e mensageria.
 
-O objetivo principal foi modernizar a infraestrutura da aplicação, automatizando deploys, melhorando escalabilidade, reduzindo riscos em produção e implementando observabilidade completa.
-
----
-
-#  Objetivos do Projeto
-
-- Padronizar ambiente de desenvolvimento
-- Implementar microsserviços containerizados
-- Automatizar execução com Docker Compose
-- Orquestrar serviços com Kubernetes
-- Criar pipeline CI/CD com GitHub Actions
-- Implementar observabilidade com Prometheus e Grafana
-- Melhorar escalabilidade e disponibilidade da aplicação
+A aplicação permite o cadastro e consulta de pedidos, armazenando os dados em um banco PostgreSQL e enviando mensagens para uma fila RabbitMQ, simulando um ambiente corporativo de processamento assíncrono.
 
 ---
 
-# Arquitetura da Aplicação
+## 🎯 Objetivos
 
-```txt
-                 ┌──────────────┐
-                 │   Gateway    │
-                 └──────┬───────┘
+* Implementar uma arquitetura baseada em microsserviços;
+* Utilizar Docker para conteinerização da aplicação;
+* Orquestrar serviços utilizando Docker Compose;
+* Utilizar PostgreSQL para persistência de dados;
+* Implementar comunicação assíncrona utilizando RabbitMQ;
+* Executar serviços em ambiente Kubernetes;
+* Aplicar conceitos de Cloud Computing e DevOps.
+
+---
+
+## 🏗 Arquitetura da Solução
+
+```text
+                 ┌─────────────┐
+                 │   Gateway   │
+                 └──────┬──────┘
                         │
-        ┌───────────────┼────────────────┐
-        │               │                │
-        ▼               ▼                ▼
-┌────────────┐  ┌────────────┐  ┌────────────┐
-│ Pedidos    │  │ Estoque    │  │ Pagamentos │
-│ Service    │  │ Service    │  │ Service    │
-└─────┬──────┘  └─────┬──────┘  └────────────┘
-      │               │
-      ▼               ▼
-┌────────────┐  ┌────────────┐
-│ PostgreSQL │  │ RabbitMQ   │
-└────────────┘  └────────────┘
+                        ▼
+                ┌─────────────┐
+                │   Pedidos   │
+                │   Service   │
+                └──────┬──────┘
+                       │
+          ┌────────────┴────────────┐
+          ▼                         ▼
+   ┌─────────────┐          ┌─────────────┐
+   │ PostgreSQL  │          │  RabbitMQ   │
+   └─────────────┘          └─────────────┘
 ```
 
 ---
 
-# ⚙️ Tecnologias Utilizadas
+## ⚙️ Tecnologias Utilizadas
 
-## Backend
-- Node.js
-- Express.js
+### Backend
 
-## Banco de Dados
-- PostgreSQL
+* Node.js
+* Express.js
 
-## Mensageria
-- RabbitMQ
+### Banco de Dados
 
-## Containerização
-- Docker
-- Docker Compose
+* PostgreSQL 16
 
-## Orquestração
-- Kubernetes
+### Mensageria
 
-## CI/CD
-- GitHub Actions
+* RabbitMQ
 
-## Observabilidade
-- Prometheus
-- Grafana
+### Conteinerização
+
+* Docker
+* Docker Compose
+
+### Orquestração
+
+* Kubernetes
+
+### Controle de Versão
+
+* Git
+* GitHub
 
 ---
 
-# 📁 Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
-```txt
-pedidos-veloz/
-│
+```text
+pedidos-veloz-kubernetes/
+
 ├── gateway/
+│
 ├── pedidos-service/
-├── estoque-service/
-├── pagamentos-service/
+│   ├── src/
+│   │   ├── database/
+│   │   ├── models/
+│   │   └── rabbitmq/
+│   │
+│   └── index.js
 │
-├── k8s/
-│   ├── pedidos-deployment.yaml
-│   ├── postgres-deployment.yaml
-│   ├── configmap.yaml
-│   └── secret.yaml
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yml
+├── kubernetes/
 │
 ├── docker-compose.yml
-├── prometheus.yml
+│
 └── README.md
 ```
 
 ---
 
-# 🐳 Executando com Docker Compose
+## 🐳 Executando com Docker Compose
 
-## Pré-requisitos
+### Pré-requisitos
 
-- Docker Desktop
-- Git
-- Node.js (opcional)
+* Docker Desktop
+* Git
 
----
-
-## Clone o repositório
+### Clonar o projeto
 
 ```bash
-git clone https://github.com/SEU-USUARIO/pedidos-veloz-kubernetes.git
+git clone https://github.com/ArthurSlgd/pedidos-veloz-kubernetes.git
 ```
 
----
-
-## Acesse o projeto
+### Acessar a pasta
 
 ```bash
 cd pedidos-veloz-kubernetes
 ```
 
----
-
-## Execute os containers
+### Executar os containers
 
 ```bash
-docker compose up --build
+docker compose up -d
+```
+
+### Verificar containers
+
+```bash
+docker ps
 ```
 
 ---
 
-# 🌐 Serviços Disponíveis
+## 🌐 Serviços Disponíveis
 
-| Serviço | Porta |
-|---|---|
-| Gateway | 3001 |
-| Pedidos Service | 3000 |
-| PostgreSQL | 5432 |
-| RabbitMQ | 15672 |
-| Prometheus | 9090 |
-| Grafana | 3002 |
-
----
-
-# ☸️ Kubernetes
-
-O projeto também possui configuração para execução em Kubernetes.
+| Serviço             | Porta |
+| ------------------- | ----- |
+| Gateway             | 3000  |
+| Pedidos Service     | 3001  |
+| PostgreSQL          | 5432  |
+| RabbitMQ Management | 15672 |
+| RabbitMQ AMQP       | 5672  |
 
 ---
 
-## Aplicar os manifests
+## 🧪 Testes Realizados
 
-```bash
-kubectl apply -f k8s/
+### Criar Pedido
+
+Endpoint:
+
+```http
+POST http://localhost:3001/pedido
+```
+
+Body:
+
+```json
+{
+  "produto": "Mouse",
+  "quantidade": 3
+}
+```
+
+Resposta esperada:
+
+```json
+{
+  "id": 1,
+  "produto": "Mouse",
+  "quantidade": 3
+}
 ```
 
 ---
 
-## Verificar pods
+### Consultar Pedidos
+
+Endpoint:
+
+```http
+GET http://localhost:3001
+```
+
+Resposta:
+
+```json
+[
+  {
+    "id": 1,
+    "produto": "Mouse",
+    "quantidade": 3
+  }
+]
+```
+
+---
+
+## 🐘 Banco de Dados PostgreSQL
+
+A aplicação utiliza PostgreSQL para armazenamento persistente dos pedidos.
+
+Tabela criada automaticamente pelo Sequelize:
+
+```sql
+Pedidos
+```
+
+Exemplo de consulta:
+
+```sql
+SELECT * FROM "Pedidos";
+```
+
+---
+
+## 📨 RabbitMQ
+
+O RabbitMQ é utilizado para processamento assíncrono dos pedidos cadastrados.
+
+Painel administrativo:
+
+```text
+http://localhost:15672
+```
+
+Credenciais padrão:
+
+```text
+Usuário: guest
+Senha: guest
+```
+
+Fila utilizada:
+
+```text
+pedidos
+```
+
+---
+
+## ☸️ Kubernetes
+
+O projeto também contempla a execução de workloads em Kubernetes.
+
+Comandos utilizados:
+
+```bash
+kubectl apply -f .
+```
+
+Verificar pods:
 
 ```bash
 kubectl get pods
 ```
 
----
+Verificar deployments:
 
-## Verificar services
+```bash
+kubectl get deployments
+```
+
+Verificar serviços:
 
 ```bash
 kubectl get services
@@ -175,136 +268,45 @@ kubectl get services
 
 ---
 
-# 🔄 CI/CD com GitHub Actions
+## 📸 Evidências
 
-O projeto utiliza GitHub Actions para integração contínua.
+Durante a execução do projeto foram coletadas evidências referentes a:
 
-A pipeline executa automaticamente:
-
-- Instalação de dependências
-- Validação dos microsserviços
-- Build automatizado
-- Verificação do ambiente
-
-Arquivo da pipeline:
-
-```txt
-.github/workflows/ci.yml
-```
+* Containers Docker em execução;
+* Serviços ativos no Docker Compose;
+* Criação de pedidos via API;
+* Persistência dos dados no PostgreSQL;
+* Mensagens enviadas ao RabbitMQ;
+* Execução dos pods Kubernetes;
+* Testes funcionais dos endpoints.
 
 ---
 
-# 📊 Observabilidade
+## 📚 Conceitos Aplicados
 
-## Prometheus
-
-O Prometheus foi utilizado para coleta de métricas e monitoramento dos serviços.
-
-Acesso:
-
-```txt
-http://localhost:9090
-```
-
----
-
-## Grafana
-
-O Grafana foi utilizado para criação de dashboards e visualização das métricas coletadas pelo Prometheus.
-
-Acesso:
-
-```txt
-http://localhost:3002
-```
-
-Login padrão:
-
-```txt
-Usuário: admin
-Senha: admin
-```
+* Microsserviços
+* Docker
+* Docker Compose
+* Kubernetes
+* Banco de Dados Relacional
+* Mensageria
+* Persistência de Dados
+* APIs REST
+* Cloud Computing
+* DevOps
 
 ---
 
-# 🔐 Segurança
+## 👨‍💻 Autor
 
-O projeto utiliza:
+Arthur Salgado
 
-- ConfigMaps
-- Secrets
-- Variáveis de ambiente
-- Isolamento via containers
-- Kubernetes Deployments
+Projeto desenvolvido para fins acadêmicos na disciplina de Cloud, DevOps e Microsserviços.
 
 ---
 
-# 🚀 Escalabilidade
+## ✅ Conclusão
 
-A aplicação foi preparada para ambientes escaláveis utilizando Kubernetes.
+O projeto demonstrou a aplicação prática de conceitos modernos de desenvolvimento e infraestrutura, utilizando microsserviços, conteinerização e mensageria.
 
-Características implementadas:
-
-- Deployments
-- Containers independentes
-- Microsserviços desacoplados
-- Estrutura compatível com HPA (Horizontal Pod Autoscaler)
-
----
-
-# 📸 Evidências do Projeto
-
-Foram realizados testes e validações utilizando:
-
-- Docker Compose
-- Kubernetes
-- Prometheus
-- Grafana
-- GitHub Actions
-
-As evidências incluem:
-
-- Pods em execução
-- Serviços ativos
-- Pipeline CI/CD validada
-- Dashboards de observabilidade
-- Targets do Prometheus em estado UP
-
----
-
-# 📚 Conceitos Aplicados
-
-- Cloud Native
-- DevOps
-- Microsserviços
-- Conteinerização
-- Orquestração
-- Observabilidade
-- Integração Contínua
-- Entrega Contínua
-- Escalabilidade
-- Infraestrutura como Código
-
----
-
-# 👨‍💻 Autor
-
-Projeto desenvolvido para fins acadêmicos na disciplina de Cloud DevOps e Microsserviços.
-
-Aluno: Gabriel Ferreira
-
----
-
-# ✅ Conclusão
-
-O projeto Pedidos Veloz demonstrou a implementação de uma arquitetura moderna baseada em microsserviços utilizando práticas DevOps.
-
-A solução proposta permitiu:
-
-- maior automação
-- melhor escalabilidade
-- deploys mais seguros
-- observabilidade da aplicação
-- padronização do ambiente
-
-resultando em uma aplicação mais confiável e preparada para crescimento.
+Foi possível implementar uma solução funcional capaz de registrar pedidos, persistir informações em banco de dados e realizar comunicação assíncrona através de filas, simulando uma arquitetura utilizada em ambientes corporativos.
