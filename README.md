@@ -305,6 +305,11 @@ Projeto desenvolvido para fins acadêmicos na disciplina de Cloud, DevOps e Micr
 
 ---
 
+## ✅ Video Pitch
+Link do Yotube
+
+https://youtu.be/6kpGuV9_HSE
+
 ## ✅ Conclusão
 
 O projeto demonstrou a aplicação prática de conceitos modernos de desenvolvimento e infraestrutura, utilizando microsserviços, conteinerização e mensageria.
