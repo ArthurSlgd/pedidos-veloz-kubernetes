@@ -1,0 +1,32 @@
+name: CI - Pedidos Veloz
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install Gateway dependencies
+      working-directory: ./gateway
+      run: npm install
+
+    - name: Install Pedidos dependencies
+      working-directory: ./pedidos-service
+      run: npm install
+
+    - name: Install Estoque dependencies
+      working-directory: ./estoque-service
+      run: npm install
